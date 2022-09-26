@@ -6,7 +6,9 @@ channel = connection.channel()
 
 channel.queue_declare(queue='reposicao')
 
-channel.basic_publish(exchange='', routing_key='reposicao', body='preciso de 30 iPhones')
+pedido = "item: iPhone, quantidade: 30"
+
+channel.basic_publish(exchange='', routing_key='reposicao', body=pedido)
 
 print("Enviando pedido de iPhone!")
 
