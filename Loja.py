@@ -41,7 +41,7 @@ class Loja:
                 referencia = self.referencia_classe(item)
                 reabastecimento = referencia - item['quantidade']
 
-                pedido = { "nome": self.nome, "quantidade": reabastecimento }
+                pedido = { "nome": item['nome'], "quantidade": reabastecimento }
                 self.channel.basic_publish(exchange='', routing_key='reposicao', body=json.dumps(pedido))
 
             return
