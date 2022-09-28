@@ -2,7 +2,7 @@
 from Loja import Loja
 
 americanas = Loja("Americanas")
-americanas.adiciona_produto("Notebook", 2)
+americanas.adiciona_produto(1, "Notebook", 2)
 americanas.remove_produto("Notebook", 2)
 
 """ def callback(ch, method, properties, body):

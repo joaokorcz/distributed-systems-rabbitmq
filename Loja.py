@@ -12,7 +12,7 @@ class Loja:
     def __del__(self):
         self.connection.close()
     
-    def adiciona_produto(self, nome, quantidade):
+    def adiciona_produto(self, id, nome, quantidade):
         if quantidade >= 100:
             classe = "A"
 
@@ -22,7 +22,7 @@ class Loja:
         else:
             classe = "C"
 
-        produto = { "nome": nome, "quantidade": quantidade, "classe": classe }
+        produto = { "id": id, "nome": nome, "quantidade": quantidade, "classe": classe }
         self.produtos.append(produto)
     
     def remove_produto(self, nome, quantidade):
@@ -41,7 +41,7 @@ class Loja:
                 referencia = self.referencia_classe(item)
                 reabastecimento = referencia - item['quantidade']
 
-                pedido = { "nome": item['nome'], "quantidade": reabastecimento }
+                pedido = { "id": item['id'], "quantidade": reabastecimento }
                 self.channel.basic_publish(exchange='', routing_key='reposicao', body=json.dumps(pedido))
 
             return
