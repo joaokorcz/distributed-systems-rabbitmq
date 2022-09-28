@@ -1,15 +1,16 @@
-#!/usr/bin/env python
 import pika
 import json
-
-connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
-channel = connection.channel()
-channel.queue_declare(queue='reposicao')
 
 class Loja:
     def __init__(self, nome):
         self.nome = nome
         self.produtos = []
+        self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
+        self.channel = self.connection.channel()
+        self.channel.queue_declare(queue='reposicao')
+
+    def __del__(self):
+        self.connection.close()
     
     def adiciona_produto(self, nome, quantidade):
         if quantidade >= 100:
@@ -41,7 +42,7 @@ class Loja:
                 reabastecimento = referencia - item['quantidade']
 
                 pedido = { "nome": self.nome, "quantidade": reabastecimento }
-                channel.basic_publish(exchange='', routing_key='reposicao', body=json.dumps(pedido))
+                self.channel.basic_publish(exchange='', routing_key='reposicao', body=json.dumps(pedido))
 
             return
 
@@ -71,15 +72,3 @@ class Loja:
         elif produto['classe'] == "B":
             return 60
         return 20
-
-americanas = Loja("Americanas")
-americanas.adiciona_produto("Notebook", 2)
-americanas.remove_produto("Notebook", 2)
-
-""" def callback(ch, method, properties, body):
-    print('Recebido:', body)
-
-channel.basic_consume(queue='fabrica', auto_ack=True, on_message_callback=callback)
-channel.start_consuming() """
-
-connection.close()
