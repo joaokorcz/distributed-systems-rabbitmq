@@ -32,7 +32,7 @@ class Loja:
         if self.queue_id == properties.correlation_id:
             decoded = body.decode()
             resposta = json.loads(decoded)
-            print('Pedido de reposição respondido...')
+            print('LOJA AVISA: Pedido de reposição respondido...')
             print('    havia estoque suficiente no cd:', resposta['estoque'])
             print('    id do produto:', resposta['id'])
             print('    quantidade recebida:', resposta['quantidade'])
@@ -48,15 +48,14 @@ class Loja:
         item = next(item for item in self.produtos if item['id'] == id)
 
         if (item['quantidade'] - quantidade) < 0:
-            print('Estoque insuficiente')
-            return
+            return False
 
         else:
             item['quantidade'] -= quantidade
             farol = self.checa_estoque(item)
 
             if farol == 'vermelho':
-                print('Loja foi para estoque vermelho no produto', item['nome'] + '...')
+                print('LOJA AVISA: com essa compra, estoque de', item['nome'] + ' ficou vermelho...')
                 print('    Fazendo pedido de reposição...')
                 referencia = self.referencia_classe(item)
                 reabastecimento = referencia - item['quantidade']
@@ -76,8 +75,9 @@ class Loja:
                 
                 self.connection.process_data_events(time_limit=5)
 
-                print('Nova quantidade do produto', item['nome'] + ':', item['quantidade'])
-            return
+                print('LOJA AVISA: Nova quantidade do produto', item['nome'] + ':', item['quantidade'])
+
+            return True
 
     def checa_estoque(self, item):
         if item['classe'] == 'A':

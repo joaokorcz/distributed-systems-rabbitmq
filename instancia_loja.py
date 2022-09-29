@@ -16,26 +16,48 @@ def selecionar_loja(instancias):
     print('-- Menu de lojas --')
     for loja in instancias:
         print(f'** { loja.id } - { loja.nome }')
+    print('** 0 - Sair')
 
-    id_selecionado = int(input('\n-- Escolha uma loja pelo número: '))
+    id_selecionado = int(input('\n>> Escolha uma loja pelo número: '))
 
-    loja = next(loja for loja in instancias if loja.id == id_selecionado)
+    try:
+        loja = next(loja for loja in instancias if loja.id == id_selecionado)
 
-    print('-- Loja selecionada:', loja.nome + '\n')
+        print('-- Loja selecionada:', loja.nome + '\n')
 
-    return loja
+        return loja
 
-def apresentar_catalogo(loja):
-    print('-- Catálogo', loja.nome, '--')
+    except:
+        if id_selecionado == 0:
+            return 'sair'
+        print('\n## ERRO\n')
+        return False
+
+def realizar_compra(loja):
+    print('-- Catálogo', loja.nome)
     for produto in loja.produtos:
         print(f'** { produto["id"] } - { produto["nome"] }')
     
-    id_selecionado = int(input('\n-- Escolha um produto pelo número: '))
+    id_selecionado = int(input('\n>> Escolha um produto pelo número: '))
 
-    produto = next(produto for produto in loja.produtos if produto['id'] == id_selecionado)
+    try:
+        produto = next(produto for produto in loja.produtos if produto['id'] == id_selecionado)
 
-    print('-- Produto selecionado:', loja.nome + '\n')
+        print('-- Produto selecionado:', produto['nome'] + '\n')
+
+        print('-- Estoque disponível:', produto['quantidade'])
+        quantidade = int(input('>> Escolha a quantidade: '))
+
+        if loja.vender(id_selecionado, quantidade):
+            print('-- Você comprou', quantidade, 'unidades de', produto['nome'] + '\n')
+        else:
+            print('## Estoque insuficiente\n')
     
-loja_selecionada = selecionar_loja(instancias)
-apresentar_catalogo(loja_selecionada)
+    except:
+        print('\n## ERRO\n')
 
+loja_selecionada = True
+while loja_selecionada != 'sair':
+    loja_selecionada = selecionar_loja(instancias)
+    if loja_selecionada and loja_selecionada != 'sair':
+        realizar_compra(loja_selecionada)
