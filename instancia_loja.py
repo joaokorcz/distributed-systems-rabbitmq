@@ -14,10 +14,11 @@ for loja in lojas:
     instancias.append(nova_loja)
     
 def selecionar_loja(instancias):
+
     print('-- Menu de lojas --')
     for loja in instancias:
         print(f'** { loja.id } - { loja.nome }')
-    print('** 0 - \u001b[36mSair\u001b[37m')
+    print('** 0 - '+ Fore.CYAN +'Sair' + Fore.RESET)
 
     id_selecionado = int(input('\n>> Escolha uma loja pelo número: '))
 
@@ -44,7 +45,7 @@ def realizar_compra(loja):
             cor = Fore.RED
 
 
-        print(f'** { produto["id"] } - { cor + produto["nome"] + Fore.WHITE}')
+        print(f'** { produto["id"] } - { cor + produto["nome"] + Fore.RESET}')
     
     id_selecionado = int(input('\n>> Escolha um produto pelo número: '))
 
