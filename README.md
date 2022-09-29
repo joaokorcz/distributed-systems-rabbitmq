@@ -7,7 +7,7 @@
 
 # execução
 
-certifique-se que os comandos `python` utilizam python 3.
+certifique-se que os comandos `python` utilizam python 3. talvez seja necessário rodar com `python3 <arquivo>`.
 
 - na pasta do projeto: `docker-compose up -d`
 - instale as dependencias: `pip install -r requirements.txt`
