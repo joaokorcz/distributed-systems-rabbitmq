@@ -5,6 +5,9 @@ import time
 
 DEBUG = False
 
+produtos_file = open('produtos_cd.json')
+itens_no_estoque = json.load(produtos_file)
+
 class Fabrica:
     def __init__(self, id, nome):
         self.id = id
@@ -23,6 +26,16 @@ class Fabrica:
             on_message_callback=self.on_response,
             auto_ack=True
         )
+
+        self.channel.basic_consume(queue='fabrica', auto_ack=True, on_message_callback=self.callback)
+
+    def callback(self, body):
+        decoded = body.decode()
+
+        if decoded == self.produtos.id:
+
+            produto_encontrado = next(item for item in itens_no_estoque if item['id'] == pedido['id'])
+            produto_encontrado['quantidade'] += 100
 
     def __del__(self):
         self.connection.close()
