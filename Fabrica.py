@@ -37,7 +37,7 @@ class Fabrica:
                 print("entrei")
                 temos = True
 
-        body = {"fabrica": self.nome, "id_produto": int(decoded), "quantidade": 10}
+        body = {"fabrica": self.nome, "id_produto": int(decoded), "quantidade": 100}
         if temos:
             ch.basic_publish(
                 exchange='',
