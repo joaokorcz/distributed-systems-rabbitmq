@@ -1,0 +1,34 @@
+[
+  {
+    "nome": "Magalu",
+    "produtos": [
+      { "id": 1, "nome": "Notebook", "classe": "C", "quantidade": 10 },
+      { "id": 2, "nome": "Celular", "classe": "A", "quantidade": 110 },
+      { "id": 3, "nome": "Tablet", "classe": "B", "quantidade": 40 }
+    ]
+  },
+  {
+    "nome": "Amazon",
+    "produtos": [
+      { "id": 4, "nome": "Alexa", "classe": "A", "quantidade": 105 },
+      { "id": 5, "nome": "Kindle", "classe": "C", "quantidade": 15 },
+      { "id": 6, "nome": "Livro", "classe": "B", "quantidade": 50 }
+    ]
+  },
+  {
+    "nome": "McDonalds",
+    "produtos": [
+      { "id": 7, "nome": "McChicken", "classe": "A", "quantidade": 150 },
+      { "id": 8, "nome": "BigMac", "classe": "B", "quantidade": 45 },
+      { "id": 9, "nome": "Casquinha", "classe": "A", "quantidade": 200 }
+    ]
+  },
+  {
+    "nome": "Carrefour",
+    "produtos": [
+      { "id": 10, "nome": "Nutella", "classe": "C", "quantidade": 10 },
+      { "id": 11, "nome": "Leite", "classe": "B", "quantidade": 55 },
+      { "id": 12, "nome": "Arroz", "classe": "A", "quantidade": 120 }
+    ]
+  }
+]

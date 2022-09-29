@@ -3,6 +3,8 @@ import json
 import uuid
 import time
 
+DEBUG = False
+
 class Loja:
     def __init__(self, nome):
         self.nome = nome
@@ -12,7 +14,7 @@ class Loja:
         self.channel.queue_declare(queue='reposicao')
 
         self.id = None
-        result = self.channel.queue_declare(queue='this', exclusive=True)
+        result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
 
         self.channel.basic_consume(
@@ -25,41 +27,42 @@ class Loja:
         self.connection.close()
     
     def on_response(self, ch, method, properties, body):
-        print(body, self.id, properties.correlation_id)
+        if DEBUG: print(body)
         if self.id == properties.correlation_id:
-            print('chegou:', body)
+            decoded = body.decode()
+            resposta = json.loads(decoded)
+            print('Pedido de reposição respondido...')
+            print('    havia estoque suficiente no cd:', resposta['estoque'])
+            print('    id do produto:', resposta['id'])
+            print('    quantidade recebida:', resposta['quantidade'])
+
+        item = next(item for item in self.produtos if item['id'] == resposta['id'])
+        item['quantidade'] += resposta['quantidade']
     
-    def adiciona_produto(self, id, nome, quantidade):
-        if quantidade >= 100:
-            classe = "A"
-
-        elif quantidade >= 60:
-            classe = "B"
-
-        else:
-            classe = "C"
-
-        produto = { "id": id, "nome": nome, "quantidade": quantidade, "classe": classe }
+    def adiciona_produto(self, id, nome, classe, quantidade):
+        produto = { 'id': id, 'nome': nome, 'quantidade': quantidade, 'classe': classe }
         self.produtos.append(produto)
     
     def vender(self, id, quantidade):
         item = next(item for item in self.produtos if item['id'] == id)
 
         if (item['quantidade'] - quantidade) < 0:
-            print("Estoque insuficiente")
+            print('Estoque insuficiente')
             return
 
         else:
             item['quantidade'] -= quantidade
             farol = self.checa_estoque(item)
 
-            if farol == "vermelho":
+            if farol == 'vermelho':
+                print('Loja foi para estoque vermelho no produto', item['nome'] + '...')
+                print('    Fazendo pedido de reposição...')
                 referencia = self.referencia_classe(item)
                 reabastecimento = referencia - item['quantidade']
 
                 self.id = str(uuid.uuid4())
 
-                pedido = { "id": item['id'], "quantidade": reabastecimento }
+                pedido = { 'id': item['id'], 'quantidade': reabastecimento }
                 self.channel.basic_publish(
                     exchange='',
                     routing_key='reposicao',
@@ -70,14 +73,15 @@ class Loja:
                     body=json.dumps(pedido)
                 )
                 
-                self.connection.process_data_events(time_limit=None)
+                self.connection.process_data_events(time_limit=5)
 
+                print('Nova quantidade do produto', item['nome'] + ':', item['quantidade'])
             return
 
     def checa_estoque(self, item):
-        if item['classe'] == "A":
+        if item['classe'] == 'A':
             comparacao = 100
-        elif item['classe'] == "B":
+        elif item['classe'] == 'B':
             comparacao = 60
         else:
             comparacao = 20
@@ -85,16 +89,16 @@ class Loja:
         porcentagem = item['quantidade'] * 100 / comparacao
         
         if porcentagem >= 50:
-            return "verde"
+            return 'verde'
 
         elif porcentagem >= 25:
-            return "amarelo"
+            return 'amarelo'
 
-        return "vermelho"
+        return 'vermelho'
 
     def referencia_classe(self, produto):
-        if produto['classe'] == "A":
+        if produto['classe'] == 'A':
             return 100
-        elif produto['classe'] == "B":
+        elif produto['classe'] == 'B':
             return 60
         return 20

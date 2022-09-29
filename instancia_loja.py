@@ -1,12 +1,15 @@
 #!/usr/bin/env python
 from Loja import Loja
+import json
 
-americanas = Loja("Americanas")
-americanas.adiciona_produto(1, "Notebook", 2)
-americanas.vender(1, 2)
+instancias = []
 
-""" def callback(ch, method, properties, body):
-    print('Recebido:', body)
-
-channel.basic_consume(queue='fabrica', auto_ack=True, on_message_callback=callback)
-channel.start_consuming() """
+lojas_file = open('lojas.json')
+lojas = json.load(lojas_file)
+for loja in lojas:
+    nova_loja = Loja(loja['nome'])
+    for produto in loja['produtos']:
+        nova_loja.adiciona_produto(produto['id'], produto['nome'], produto['classe'], produto['quantidade'])
+    instancias.append(nova_loja)
+    
+instancias[0].vender(1, 8)
