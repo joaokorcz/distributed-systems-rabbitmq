@@ -6,14 +6,15 @@ import time
 DEBUG = False
 
 class Loja:
-    def __init__(self, nome):
+    def __init__(self, id, nome):
+        self.id = id
         self.nome = nome
         self.produtos = []
         self.connection = pika.BlockingConnection(pika.ConnectionParameters(host='localhost'))
         self.channel = self.connection.channel()
         self.channel.queue_declare(queue='reposicao')
 
-        self.id = None
+        self.queue_id = None
         result = self.channel.queue_declare(queue='', exclusive=True)
         self.callback_queue = result.method.queue
 
@@ -28,7 +29,7 @@ class Loja:
     
     def on_response(self, ch, method, properties, body):
         if DEBUG: print(body)
-        if self.id == properties.correlation_id:
+        if self.queue_id == properties.correlation_id:
             decoded = body.decode()
             resposta = json.loads(decoded)
             print('Pedido de reposição respondido...')
@@ -60,7 +61,7 @@ class Loja:
                 referencia = self.referencia_classe(item)
                 reabastecimento = referencia - item['quantidade']
 
-                self.id = str(uuid.uuid4())
+                self.queue_id = str(uuid.uuid4())
 
                 pedido = { 'id': item['id'], 'quantidade': reabastecimento }
                 self.channel.basic_publish(
@@ -68,7 +69,7 @@ class Loja:
                     routing_key='reposicao',
                     properties=pika.BasicProperties(
                         reply_to=self.callback_queue,
-                        correlation_id=self.id,
+                        correlation_id=self.queue_id,
                     ),
                     body=json.dumps(pedido)
                 )

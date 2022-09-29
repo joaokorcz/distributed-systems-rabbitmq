@@ -1,5 +1,6 @@
 [
   {
+    "id": 1,
     "nome": "Magalu",
     "produtos": [
       { "id": 1, "nome": "Notebook", "classe": "C", "quantidade": 10 },
@@ -8,6 +9,7 @@
     ]
   },
   {
+    "id": 2,
     "nome": "Amazon",
     "produtos": [
       { "id": 4, "nome": "Alexa", "classe": "A", "quantidade": 105 },
@@ -16,6 +18,7 @@
     ]
   },
   {
+    "id": 3,
     "nome": "McDonalds",
     "produtos": [
       { "id": 7, "nome": "McChicken", "classe": "A", "quantidade": 150 },
@@ -24,6 +27,7 @@
     ]
   },
   {
+    "id": 4,
     "nome": "Carrefour",
     "produtos": [
       { "id": 10, "nome": "Nutella", "classe": "C", "quantidade": 10 },
