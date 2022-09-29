@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 from Loja import Loja
 import json
+from colorama import Fore
 
 instancias = []
 
@@ -16,14 +17,14 @@ def selecionar_loja(instancias):
     print('-- Menu de lojas --')
     for loja in instancias:
         print(f'** { loja.id } - { loja.nome }')
-    print('** 0 - Sair')
+    print('** 0 - \u001b[36mSair\u001b[37m')
 
     id_selecionado = int(input('\n>> Escolha uma loja pelo número: '))
 
     try:
         loja = next(loja for loja in instancias if loja.id == id_selecionado)
 
-        print('-- Loja selecionada:', loja.nome + '\n')
+        print('-- Loja selecionada:', loja.nome + '\n') 
 
         return loja
 
@@ -36,7 +37,14 @@ def selecionar_loja(instancias):
 def realizar_compra(loja):
     print('-- Catálogo', loja.nome)
     for produto in loja.produtos:
-        print(f'** { produto["id"] } - { produto["nome"] }')
+        cor = Fore.GREEN
+        if produto['farol'] == 'amarelo':
+            cor = Fore.YELLOW
+        elif produto['farol'] == 'vermelho':
+            cor = Fore.RED
+
+
+        print(f'** { produto["id"] } - { cor + produto["nome"] + Fore.WHITE}')
     
     id_selecionado = int(input('\n>> Escolha um produto pelo número: '))
 

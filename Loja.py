@@ -41,7 +41,8 @@ class Loja:
         item['quantidade'] += resposta['quantidade']
     
     def adiciona_produto(self, id, nome, classe, quantidade):
-        produto = { 'id': id, 'nome': nome, 'quantidade': quantidade, 'classe': classe }
+        produto = { 'id': id, 'nome': nome, 'quantidade': quantidade, 'classe': classe, 'farol': '' }
+        produto['farol'] = self.checa_estoque(produto)
         self.produtos.append(produto)
     
     def vender(self, id, quantidade):
@@ -53,6 +54,8 @@ class Loja:
         else:
             item['quantidade'] -= quantidade
             farol = self.checa_estoque(item)
+
+            item['farol'] = farol
 
             if farol == 'vermelho':
                 print('LOJA AVISA: com essa compra, estoque de', item['nome'] + ' ficou vermelho...')

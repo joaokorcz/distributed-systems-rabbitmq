@@ -3,9 +3,9 @@
     "id": 1,
     "nome": "Magalu",
     "produtos": [
-      { "id": 1, "nome": "Notebook", "classe": "C", "quantidade": 10 },
-      { "id": 2, "nome": "Celular", "classe": "A", "quantidade": 110 },
-      { "id": 3, "nome": "Tablet", "classe": "B", "quantidade": 40 }
+      { "id": 1, "nome": "Notebook", "classe": "C", "quantidade": 15 },
+      { "id": 2, "nome": "Celular", "classe": "A", "quantidade": 30 },
+      { "id": 3, "nome": "Tablet", "classe": "B", "quantidade": 9 }
     ]
   },
   {
