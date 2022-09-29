@@ -15,3 +15,4 @@ certifique-se que os comandos `python` utilizam python 3.
   - este terminal será usado para fazer as compras nas 20 lojas
 - em outro terminal: `python centro_distribuicao.py`
 - em outro terminal: `python instancia_fabrica.py`
+- para matar o container do RabbitMq **após todo o uso**: `docker-compose down`
