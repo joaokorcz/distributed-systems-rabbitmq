@@ -7,7 +7,6 @@ instancias = []
 lojas_file = open('lojas.json')
 lojas = json.load(lojas_file)
 for loja in lojas:
-    print(loja['id'])
     nova_loja = Loja(loja['id'], loja['nome'])
     for produto in loja['produtos']:
         nova_loja.adiciona_produto(produto['id'], produto['nome'], produto['classe'], produto['quantidade'])
@@ -22,14 +21,20 @@ def selecionar_loja(instancias):
 
     loja = next(loja for loja in instancias if loja.id == id_selecionado)
 
-    print('-- Loja selecionada:', loja.nome)
+    print('-- Loja selecionada:', loja.nome + '\n')
 
     return loja
 
 def apresentar_catalogo(loja):
     print('-- Catálogo', loja.nome, '--')
-    for produtos in loja.produtos:
+    for produto in loja.produtos:
         print(f'** { produto["id"] } - { produto["nome"] }')
+    
+    id_selecionado = int(input('\n-- Escolha um produto pelo número: '))
+
+    produto = next(produto for produto in loja.produtos if produto['id'] == id_selecionado)
+
+    print('-- Produto selecionado:', loja.nome + '\n')
     
 loja_selecionada = selecionar_loja(instancias)
 apresentar_catalogo(loja_selecionada)
