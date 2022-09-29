@@ -73,7 +73,7 @@ class Loja:
                     body=json.dumps(pedido)
                 )
                 
-                self.connection.process_data_events(time_limit=5)
+                self.connection.process_data_events(time_limit=None)
 
                 print('LOJA AVISA: Nova quantidade do produto', item['nome'] + ':', item['quantidade'])
 

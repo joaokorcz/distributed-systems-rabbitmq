@@ -20,7 +20,25 @@ fabricas = json.load(fabrica_file)
 
 result = channel.queue_declare(queue='', exclusive=True)
 callback_queue = result.method.queue
-queue_id = None
+global queue_id
+
+
+def on_response(ch, method, properties, body):
+    if DEBUG:
+        print(body)
+    if queue_id == properties.correlation_id:
+        decoded = body.decode()
+        response = json.loads(decoded)
+
+        item = next(item for item in itens_no_estoque if item['id'] == response['id_produto'])
+        item['quantidade'] += response['quantidade']
+        print('Recebemos da fábrica', response['quantidade'], 'unidades do produto de id:', item['id'])
+
+channel.basic_consume(
+    queue=callback_queue,
+    on_message_callback=on_response,
+    auto_ack=True
+)
 
 def callback(ch, method, properties, body):
     if DEBUG:
@@ -44,11 +62,10 @@ def callback(ch, method, properties, body):
         print('    temos estoque suficiente: nao')
         body = {'estoque': 'nao', 'id': pedido['id'], 'quantidade': 0}
 
-    print('Enviando resposta para o produto de id', pedido['id'])
-
-    if body.estoque == 'nao':
+    if body['estoque'] == 'nao':
+        global queue_id
         queue_id = str(uuid.uuid4())
-
+        print("QUEUE ID:", queue_id)
         ch.basic_publish(
             exchange='',
             routing_key='fabrica',
@@ -59,6 +76,10 @@ def callback(ch, method, properties, body):
             body=json.dumps(pedido['id'])
         )
 
+       # ch.connection.process_data_events(time_limit=None)
+        
+    print('Enviando resposta para o produto de id', pedido['id'])
+
     ch.basic_publish(
         exchange='',
         routing_key=properties.reply_to,
@@ -67,9 +88,8 @@ def callback(ch, method, properties, body):
         ),
         body=json.dumps(body))
 
-    ch.basic_ack(delivery_tag=method.delivery_tag)
 
-    #channel.basic_publish(exchange='', routing_key='fabrica', body=pedido)
+    ch.basic_ack(delivery_tag=method.delivery_tag)
 
 
 channel.basic_consume(queue='reposicao', on_message_callback=callback)
