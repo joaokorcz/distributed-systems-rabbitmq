@@ -1,0 +1,35 @@
+[
+    {
+      "nome": "Fabrica 1",
+      "produtos": [
+        { "id": 1, "nome": "Notebook"},
+        { "id": 2, "nome": "Celular"},
+        { "id": 3, "nome": "Tablet"}
+      ]
+    },
+    {
+      "nome": "Fabrica 2",
+      "produtos": [
+        { "id": 4, "nome": "Alexa"},
+        { "id": 5, "nome": "Kindle"},
+        { "id": 6, "nome": "Livro"}
+      ]
+    },
+    {
+      "nome": "Fabrica 3",
+      "produtos": [
+        { "id": 7, "nome": "McChicken"},
+        { "id": 8, "nome": "BigMac"},
+        { "id": 9, "nome": "Casquinha"}
+      ]
+    },
+    {
+      "nome": "Fabrica 4",
+      "produtos": [
+        { "id": 10, "nome": "Nutella"},
+        { "id": 11, "nome": "Leite"},
+        { "id": 12, "nome": "Arroz"}
+      ]
+    }
+  ]
+  

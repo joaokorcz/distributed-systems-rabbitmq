@@ -33,6 +33,17 @@ def callback(ch, method, properties, body):
 
     print('Enviando resposta para o produto de id', pedido['id'])
 
+    if body.estoque == 'nao':
+        body.quantidade = 100
+
+        ch.basic_publish(
+        exchange='',
+        routing_key='fabrica',
+        properties=pika.BasicProperties(
+            correlation_id = properties.correlation_id
+        ), 
+        body=json.dumps(body))
+
     ch.basic_publish(
         exchange='',
         routing_key=properties.reply_to,
