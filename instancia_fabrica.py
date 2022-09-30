@@ -10,9 +10,6 @@ channel = connection.channel()
 fabrica_file = open('fabricas.json')
 fabricas = json.load(fabrica_file)
 
-produtos_file = open('produtos_cd.json')
-itens_no_estoque = json.load(produtos_file)
-
 instancias = []
 
 for fabrica in fabricas:
