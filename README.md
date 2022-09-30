@@ -1,5 +1,9 @@
 # distributed-systems-rabbitmq
 
+# alunos
+  - João Otavio Martini Korczovei - 790913
+  - Mateus Grota Nishimura Ferro - 771043
+
 # requisitos
   - docker e docker-compose
   - python3
